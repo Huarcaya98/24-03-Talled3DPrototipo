@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Personaje : MonoBehaviour
 {
-     [SerializeField] protected float velocidad = 5f;
+     [SerializeField] public float velocidad = 5f; //Lo he cambiado a publica para mostralo en la interfaz de comandos
      [SerializeField]protected float fuerzaSalto = 7f;
      public float vida = 100f;
      public float cordura = 100f; // Estado mental

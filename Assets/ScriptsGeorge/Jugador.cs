@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Jugador : Personaje
 {
+    public SistemaDeModificacionDeParametros scriptSistema; //He anadido scriptSistema para que la interfaz de comandos aumente o disminuya la velocidad
     //caminar
     protected override void Move()
     {
@@ -17,15 +18,15 @@ public class Jugador : Personaje
 
     }
     //Correr
-    protected override void Correr()
+    protected override void Correr() 
     {
         if(Input.GetKey(KeyCode.LeftShift) && EstaEnSuelo())
         {
-            velocidad = 7.5f;
+            velocidad = 7.5f+scriptSistema.cambioDeVelocidad ;
         }
         else
         {
-            velocidad = 5f;
+            velocidad = 5f+scriptSistema.cambioDeVelocidad;
         }
     }
     //Saltar

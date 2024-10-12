@@ -3,7 +3,7 @@ public class SistemaGUI : MonoBehaviour
 {
     private bool estaPausado = false;
     public GameObject menuPausa;
-    //public FPScamera scriptCamara;
+    public PPCamara scriptCamara;
 
     void Start()
     {
@@ -32,11 +32,11 @@ public class SistemaGUI : MonoBehaviour
             {
                 menuPausa.SetActive(true);
             }
-            //if (scriptCamara != null)
-            //{
-            //    Cursor.lockState = CursorLockMode.None;
-            //    scriptCamara.enabled = false;
-            //}
+            if (scriptCamara != null)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                scriptCamara.enabled = false;
+            }
         }
         else
         {
@@ -45,11 +45,11 @@ public class SistemaGUI : MonoBehaviour
             {
                 menuPausa.SetActive(false);
             }
-            //if (scriptCamara != null)
-            //{
-            //    scriptCamara.enabled = true;
-            //    Cursor.lockState = CursorLockMode.Locked;
-            //}
+            if (scriptCamara != null)
+            {
+                scriptCamara.enabled = true;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
         }
     }
 }
