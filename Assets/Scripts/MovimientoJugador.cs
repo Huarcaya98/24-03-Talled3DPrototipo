@@ -2,54 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovimientoJugador : SistemaMovimiento
+public class MovimientoJugador : MonoBehaviour
 {
-    [SerializeField] private float resistenciaCorrer = 10f;
-    [SerializeField] private float fuerzaSalto = 5f;
-    [SerializeField] private float resistenciaActual = 100f;
-    [SerializeField] private bool enSuelo = false;
+    public float velocidad = 5f;
+    public int vida = 100;
+    
 
-    protected override void Move()
+        
+    void Update()
     {
-        float movimientoHorizontal = Input.GetAxis("Horizontal");
-        float movimientoVertical = Input.GetAxis("Vertical");
-        Vector3 velocidad = Vector3.zero;
+        float movimientoHorizontal = Input.GetAxis("Horizontal") * velocidad * Time.deltaTime;
+        float movimientoVertical = Input.GetAxis("Vertical") * velocidad * Time.deltaTime;
 
-        if (movimientoHorizontal != 0 || movimientoVertical != 0)
-        {
-            Vector3 direccion = (transform.forward * movimientoVertical + transform.right * movimientoHorizontal);
-
-            if (Input.GetKey(KeyCode.LeftShift) && resistenciaActual > 0)
-            {
-                velocidad = direccion * velocidadPadre * 2;
-                resistenciaActual -= resistenciaCorrer * Time.deltaTime;
-            }
-            else
-            {
-                velocidad = direccion * velocidadPadre;
-            }
-        }
-
-        velocidad.y = rb.velocity.y;
-        rb.velocity = velocidad;
-
-        // Saltar
-        if (Input.GetButtonDown("Jump") && enSuelo == true)
-        {
-            rb.AddForce(Vector3.up * fuerzaSalto, ForceMode.Impulse);
-        }
+        transform.Translate(movimientoHorizontal, 0, movimientoVertical);
     }
 
-    public void RecuperarResistencia(float cantidad)
+    public void RecibirDanio(int cantidad)
     {
-        resistenciaActual = Mathf.Min(resistenciaActual + cantidad, 100f);
-    }
+        vida -= cantidad;
+        Debug.Log("Vida restante :" + vida);
 
-    private void OnCollisionStay(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Suelo"))
+        if(vida <= 0)
         {
-            enSuelo = true;
+            Debug.Log("El jugador a muerto ");
         }
+
     }
 }
