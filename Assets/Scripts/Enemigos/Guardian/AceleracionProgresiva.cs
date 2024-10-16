@@ -35,7 +35,7 @@ public class AceleracionProgresiva : GuardianTiempo
             velocidad = Mathf.Clamp(velocidad, 0, velocidadMaxima); 
 
             
-            Transform jugador = GameObject.FindWithTag("JUGADOR").transform;
+            Transform jugador = GameObject.FindWithTag("Player").transform;
             transform.position = Vector3.MoveTowards(transform.position, jugador.position, velocidad * Time.deltaTime);
 
             
