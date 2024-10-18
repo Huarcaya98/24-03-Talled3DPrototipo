@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class BotonJugar : SistemaPantallas
 {
+    [SerializeField] private string nombreEscena;
+
     protected override void Init()
     {
         base.Init();
@@ -14,6 +16,6 @@ public class BotonJugar : SistemaPantallas
     protected override void AccionBoton()
     {
         ReproducirSonido();
-        SceneManager.LoadScene("Nivel 1");
+        SceneManager.LoadScene("nombreEscena");
     }
 }

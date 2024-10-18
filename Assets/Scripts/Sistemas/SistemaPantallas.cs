@@ -28,7 +28,6 @@ public class SistemaPantallas : MonoBehaviour
     [Header("Volumen")]
     [SerializeField] protected Slider volumenPrincipal;
     [SerializeField] protected Slider volumenFX;
-    [SerializeField] protected Toggle mute;
     protected float ultimoVolumen;
 
     private void Awake()
