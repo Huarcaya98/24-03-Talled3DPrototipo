@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GuarianTemplo : MonoBehaviour
+public class GTemplo : MonoBehaviour
 {
+
     [SerializeField] protected float rangoDeAtaque = 4f;
     [SerializeField] protected float velocidad = 4f;
     public Vector3 posicionOriginal;
@@ -91,5 +92,9 @@ public class GuarianTemplo : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, rangoDeAtaque);
     }
+
+
+
+
 
 }
