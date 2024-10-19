@@ -23,6 +23,7 @@ public class GTemplo : MonoBehaviour
     protected void Start()
     {
         rb = GetComponent<Rigidbody>();
+        rb.isKinematic = true;
         posicionOriginal = transform.position;
         jugador = GameObject.FindWithTag("JUGADOR");
         if (jugador != null)

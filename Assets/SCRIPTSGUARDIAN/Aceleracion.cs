@@ -9,7 +9,7 @@ public class Aceleracion: GTemplo
     private float aceleracionBase;
     private bool persiguiendoJugador = false;
 
-    private Transform jugador;
+    private Transform jugadorTransform;
 
 
     void Start()
@@ -21,7 +21,7 @@ public class Aceleracion: GTemplo
         GameObject jugadorObj = GameObject.FindWithTag("JUGADOR");
         if (jugadorObj != null)
         {
-            jugador = jugadorObj.transform;
+            jugadorTransform = jugadorObj.transform;
         }
         else
         {
@@ -45,10 +45,10 @@ public class Aceleracion: GTemplo
             velocidad = Mathf.Clamp(velocidad, 0, velocidadMaxima);
 
 
-            transform.position = Vector3.MoveTowards(transform.position, jugador.position, velocidad * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, jugador.transform.position, velocidad * Time.deltaTime);
 
 
-            if (Time.time >= proximoAtaque && Vector3.Distance(transform.position, jugador.position) < rangoDeAtaque)
+            if (Time.time >= proximoAtaque && Vector3.Distance(transform.position, jugador.transform.position) < rangoDeAtaque)
             {
                 Atacar();
                 proximoAtaque = Time.time + tiempoEntreAtaques;
@@ -66,7 +66,7 @@ public class Aceleracion: GTemplo
     private bool JugadorEnRango()
     {
 
-        return jugador != null && Vector3.Distance(transform.position, jugador.position) < rangoDeAtaque;
+        return jugador != null && Vector3.Distance(transform.position, jugador.transform.position) < rangoDeAtaque;
     }
 
     public override void Atacar()
