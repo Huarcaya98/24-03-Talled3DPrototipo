@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Jugador
   - Piston
+  - JUGADOR
   layers:
   - Default
   - TransparentFX
