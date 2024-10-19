@@ -231,6 +231,8 @@ GameObject:
   - component: {fileID: 290998277}
   - component: {fileID: 290998276}
   - component: {fileID: 290998283}
+  - component: {fileID: 290998284}
+  - component: {fileID: 290998285}
   m_Layer: 0
   m_Name: GuardianDelTemplo
   m_TagString: Untagged
@@ -406,6 +408,45 @@ MonoBehaviour:
   tiempoEntreAtaques: 2
   proximoAtaque: 0
   distanciaDePatrullaje: 5
+--- !u!114 &290998284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 290998275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01de7e3d74e971d4bb3f812d712c1d85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rangoDeAtaque: 4
+  velocidad: 4
+  posicionOriginal: {x: 0, y: 0, z: 0}
+  puntosDePatrulla: []
+  tiempoEntreAtaques: 2
+  proximoAtaque: 0
+  tiempoPersecucion: 10
+  distanciaMinima: 1.5
+--- !u!114 &290998285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 290998275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83c702212a165324788951c1f75036cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rangoDeAtaque: 4
+  velocidad: 4
+  posicionOriginal: {x: 0, y: 0, z: 0}
+  puntosDePatrulla: []
+  tiempoEntreAtaques: 2
+  proximoAtaque: 0
+  aceleracion: 2
 --- !u!1 &827099780
 GameObject:
   m_ObjectHideFlags: 0
