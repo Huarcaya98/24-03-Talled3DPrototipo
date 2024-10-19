@@ -4,15 +4,77 @@ using UnityEngine;
 
 public class GPersiguiendo : GTemplo
 {
-    // Start is called before the first frame update
-    void Start()
+    public float tiempoPersecucion = 10f;
+    public float distanciaMinima = 1.5f;
+    private float contadorPersecucion = 0f;
+    private bool estaPersiguiendo = false;
+
+   void Update()
     {
-        
+        if (JugadorEnRango())
+        {
+            if (!estaPersiguiendo)
+            {
+                estaPersiguiendo = true;
+                contadorPersecucion = tiempoPersecucion;
+            }
+
+            if (estaPersiguiendo)
+            {
+                float distanciaAlJugador = Vector3.Distance(transform.position, jugador.transform.position);
+
+                if (distanciaAlJugador > distanciaMinima)
+                {
+                    PerseguirJugador();
+                }
+
+                contadorPersecucion -= Time.deltaTime;
+
+                if (contadorPersecucion <= 0f)
+                {
+                    estaPersiguiendo = false;
+                    RegresarAPatrullar();
+                }
+
+            }
+        }
+        else if (!estaPersiguiendo)
+        {
+
+            Patrullar();
+        }
+    }
+    private void PerseguirJugador()
+    {
+
+        velocidad += Time.deltaTime * 0.5f;
+        Vector3 direccion = (jugador.transform.position - transform.position).normalized;
+        transform.position += direccion * velocidad * Time.deltaTime;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void RegresarAPatrullar()
     {
-        
+
+        velocidad = 4f;
     }
+
+    private bool JugadorEnRango()
+    {
+
+        if (jugador != null)
+        {
+            float distanciaAlJugador = Vector3.Distance(transform.position, jugador.transform.position);
+            return distanciaAlJugador <= rangoDeAtaque;
+        }
+        return false;
+    }
+
+    public override void Atacar()
+    {
+        base.Atacar();
+    }
+
+
 }
+
+
