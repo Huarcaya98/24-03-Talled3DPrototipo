@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class Personaje : MonoBehaviour
 {
-     [SerializeField] public float velocidad = 5f; //Lo he cambiado a publica para mostralo en la interfaz de comandos
+     [SerializeField] public float velocidad = 5f;
      [SerializeField]protected float fuerzaSalto = 7f;
-     public float vida = 100f;
-     public float cordura = 100f; // Estado mental
      public bool agachado =  false;
 
     protected Rigidbody rb;
@@ -54,19 +52,19 @@ public class Personaje : MonoBehaviour
     {
 
     }
-    protected virtual void RecibirDanio()
+    protected virtual void Objeto(int value)
     {
 
     }
 
-    protected virtual void Cordura()
+    protected virtual void CambioCordura(int value)
     {
 
     }
 
-    protected virtual void Morir()
+    protected virtual void CambioVida(int value)
     {
-
+       
     }
 
     protected virtual bool EstaEnSuelo()
@@ -79,21 +77,5 @@ public class Personaje : MonoBehaviour
         return !EstaEnSuelo();
     }
 
-    //Metodo para collisiones con el suelo
-
-     private void OnCollisionStay(Collision collision)
-    {
-        if(collision.gameObject.CompareTag("Suelo"))
-        {
-            enSuelo = true;
-        }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if(collision.gameObject.CompareTag("Suelo"))
-        {
-            enSuelo = false;
-        }
-    }
+   
 }
