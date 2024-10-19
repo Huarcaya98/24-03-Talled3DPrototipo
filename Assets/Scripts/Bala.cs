@@ -34,6 +34,10 @@ public class Bala : MonoBehaviour
 
         }
 
+        if(collision.gameObject.CompareTag("Bacija"))
+        {
+            Destroy(gameObject);
+        }
         
     }
 }
