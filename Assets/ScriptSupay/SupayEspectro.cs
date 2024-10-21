@@ -10,6 +10,7 @@ public class SupayEspectro : MonoBehaviour
     [SerializeField] private float velocidadPersecucion = 4f; 
     [SerializeField] private float dañoPorGolpe = 10f;
     [SerializeField] private float intervaloDeDaño = 2f;
+    [SerializeField] private float porcentajeCordura = 0.3f;
 
     private Transform jugador;
     private Vector3 posicionInicial;
@@ -68,12 +69,47 @@ public class SupayEspectro : MonoBehaviour
                 Debug.Log("ESTÁ MUERTO");
                 Destroy(jugador.gameObject); 
             }
+            TeletransportarYReducirCordura();
         }
 
         tiempoRestantePersecucion -= Time.deltaTime;
         if (tiempoRestantePersecucion <= 0) 
         {
             RegresarAPosicionInicial();
+        }
+    }
+
+    private void TeletransportarYReducirCordura()
+    {
+
+        StartCoroutine(TeletransportarCoroutine());
+    }
+
+    private IEnumerator TeletransportarCoroutine()
+    {
+       
+        gameObject.SetActive(false); 
+
+        
+        yield return new WaitForSeconds(0.1f);
+
+        
+        Vector3 direccionAlJugador = (jugador.position - transform.position).normalized;
+        Vector3 nuevaPosicion = jugador.position - direccionAlJugador * 1.5f; 
+        transform.position = nuevaPosicion;
+
+        
+        gameObject.SetActive(true); 
+
+        
+        int corduraAFijar = (int)(jugador.GetComponent<Player>().GetCordura() * porcentajeCordura);
+        jugador.GetComponent<Player>().ReducirCordura(corduraAFijar);
+
+        
+        if (jugador.GetComponent<Player>().GetCordura() <= 0)
+        {
+            Debug.Log("EL JUGADOR SE VOLVIO LOCO");
+            Destroy(jugador.gameObject); 
         }
     }
 
