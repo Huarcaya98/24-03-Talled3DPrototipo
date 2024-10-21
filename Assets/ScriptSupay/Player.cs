@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] private float vida = 100f;
-    [SerializeField] private float cordura = 100f;
+    [SerializeField] private int cordura = 100;
     [SerializeField] private float velocidadMovimiento = 5f;
 
     private Rigidbody rb;
@@ -23,9 +23,6 @@ public class Player : MonoBehaviour
 
         movimiento = new Vector3(movimientoHorizontal, 0f, movimientoVertical).normalized;
 
-        cordura -= Time.deltaTime * 0.1f; 
-        if (cordura < 0) cordura = 0;
-
         if (vida <= 0)
         {
             Debug.Log("El jugador ha muerto.");
@@ -40,7 +37,7 @@ public class Player : MonoBehaviour
        
         if (movimiento != Vector3.zero)
         {
-            rb.MovePosition(rb.position + movimiento * Time.fixedDeltaTime);
+            rb.MovePosition(rb.position + movimiento * velocidadMovimiento * Time.fixedDeltaTime);
         }
     }
 
@@ -50,10 +47,19 @@ public class Player : MonoBehaviour
         if (vida < 0) vida = 0;
     }
 
-    public void ReducirCordura(float cantidad)
+    public void ReducirCordura(int cantidad)
     {
         cordura -= cantidad;
-        if (cordura < 0) cordura = 0;
+        if (cordura < 0)
+        {
+            cordura = 0;
+            Debug.Log("JUGADOR SE VOLVIO LOCO");
+        }
+    }
+
+    public float GetCordura()
+    {
+        return cordura;
     }
 
 }
