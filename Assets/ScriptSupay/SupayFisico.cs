@@ -6,23 +6,29 @@ public class SupayFisico : MonoBehaviour
 {
 
     [SerializeField] private GameObject balaLargaDistanciaPrefab; 
-    [SerializeField] private GameObject balaCortaDistanciaPrefab;  
+    [SerializeField] private GameObject balaCortaDistanciaPrefab;
+    [SerializeField] private Transform firePoint;
     [SerializeField] private float tiempoEntreDisparos = 1f;
     [SerializeField] private float velocidadBalaLarga = 10f;
     [SerializeField] private float velocidadBalaCorta = 5f;
     [SerializeField] private float rangoAtaqueDistancia = 15f;
     [SerializeField] private float rangoAtaqueCorto = 5f;
     [SerializeField] private float velocidadEmbestida = 8f;
+    public float danoEmbestida = 20f; 
+    public int corduraEmbestida = 10;
+    public float rangoDeEmbiste = 3f;
+
+
+    private bool enEmbestida = false;
 
     private Player player;
-    private bool enAtaqueDistancia = false;
-    private bool enAtaqueCorto = false;
-    private bool enEmbestida = false;
     private float proximoDisparo;
+    private bool haEmbistido = false;
 
     private void Start()
     {
-        player = FindObjectOfType<Player>();  
+        player = FindObjectOfType<Player>();
+       
     }
 
     private void Update()
@@ -32,44 +38,58 @@ public class SupayFisico : MonoBehaviour
             float distanciaJugador = Vector3.Distance(transform.position, player.transform.position);
 
             
-            if (Input.GetMouseButtonDown(0) && Time.time >= proximoDisparo)  
+            ActualizarFirePoint();
+
+            if (distanciaJugador < rangoAtaqueDistancia)
             {
-                if (distanciaJugador > rangoAtaqueCorto && distanciaJugador <= rangoAtaqueDistancia && !enEmbestida)
+                if (!haEmbistido)
+                {
+                    haEmbistido = true;
+                    Embestir();
+                    Invoke(nameof(TerminarEmbestida), 1f); 
+                }
+
+                
+                if (distanciaJugador > rangoAtaqueCorto && Time.time >= proximoDisparo)
                 {
                     DispararLargaDistancia();
                     proximoDisparo = Time.time + tiempoEntreDisparos;
                 }
-            }
 
-            
-            if (Input.GetMouseButtonDown(1) && Time.time >= proximoDisparo)  
-            {
-                if (distanciaJugador <= rangoAtaqueCorto && !enEmbestida)
+               
+                if (distanciaJugador <= rangoAtaqueCorto && Time.time >= proximoDisparo)
                 {
                     DispararCortaDistancia();
                     proximoDisparo = Time.time + tiempoEntreDisparos;
                 }
             }
-
-            
-            if (distanciaJugador <= rangoAtaqueDistancia && distanciaJugador > rangoAtaqueCorto && !enAtaqueDistancia && !enAtaqueCorto)
+            else
             {
-                if (!enEmbestida)
-                {
-                    enEmbestida = true;
-                    Embestir();
-                    Invoke(nameof(TerminarEmbestida), 15f); 
-                }
+                haEmbistido = false; 
+                enEmbestida = false; 
             }
+        }
+    }
+
+    private void ActualizarFirePoint()
+    {
+        if (player != null)
+        {
+            
+            Vector3 direccion = (player.transform.position - transform.position).normalized;
+
+           
+            Quaternion rotacion = Quaternion.LookRotation(direccion);
+            firePoint.rotation = rotacion;
         }
     }
 
     private void DispararLargaDistancia()
     {
-        
-        GameObject bala = Instantiate(balaLargaDistanciaPrefab, transform.position, Quaternion.identity);
+
+        GameObject bala = Instantiate(balaLargaDistanciaPrefab, firePoint.position, firePoint.rotation);
         Rigidbody rb = bala.GetComponent<Rigidbody>();
-        rb.velocity = (player.transform.position - transform.position).normalized * velocidadBalaLarga;
+        rb.velocity = firePoint.forward * velocidadBalaLarga;
 
         
         player.RecibirDaño(player.GetVida() * 0.4f);
@@ -78,30 +98,47 @@ public class SupayFisico : MonoBehaviour
 
     private void DispararCortaDistancia()
     {
-        
-        GameObject bala = Instantiate(balaCortaDistanciaPrefab, transform.position, Quaternion.identity);
-        Rigidbody rb = bala.GetComponent<Rigidbody>();
-        rb.velocity = (player.transform.position - transform.position).normalized * velocidadBalaCorta;
 
-        
+        GameObject bala = Instantiate(balaCortaDistanciaPrefab, firePoint.position, firePoint.rotation);
+        Rigidbody rb = bala.GetComponent<Rigidbody>();
+        rb.velocity = firePoint.forward * velocidadBalaCorta;
+
+       
         player.RecibirDaño(player.GetVida() * 0.15f);
         player.ReducirCordura(Mathf.RoundToInt(player.GetCordura() * 0.2f));
     }
 
     private void Embestir()
     {
-        
-        transform.position = Vector3.MoveTowards(transform.position, player.transform.position, velocidadEmbestida * Time.deltaTime);
 
-        if (Vector3.Distance(transform.position, player.transform.position) < 1f)  
+        if (Vector3.Distance(transform.position, player.transform.position) < rangoDeEmbiste)
         {
-            player.RecibirDaño(player.GetVida() * 0.5f);  
+            
+            Vector3 direccion = (player.transform.position - transform.position).normalized;
+            transform.position += direccion * velocidadEmbestida * Time.deltaTime;
+
+            
+            player.RecibirDaño(danoEmbestida);
+            player.ReducirCordura(corduraEmbestida);
         }
     }
 
     private void TerminarEmbestida()
     {
-        enEmbestida = false;
+        enEmbestida = false; 
     }
 
+    private void OnDrawGizmos()
+    {
+        if (firePoint != null)
+        {
+            Gizmos.color = Color.black;
+            Gizmos.DrawLine(firePoint.position, firePoint.position + firePoint.forward * 5);
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(transform.position, rangoAtaqueDistancia);
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(transform.position, rangoAtaqueCorto);
+        }
+    }
 }

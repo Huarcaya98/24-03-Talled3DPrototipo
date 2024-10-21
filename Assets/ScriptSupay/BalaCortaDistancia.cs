@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BalaLargaDistancia : MonoBehaviour
+public class BalaCortaDistancia : MonoBehaviour
 {
-    [SerializeField] private float daño = 20f;  
-    [SerializeField] private float velocidad = 10f;
-    [SerializeField] private float tiempoVida = 5f;
+    [SerializeField] private float daño = 10f; 
+    [SerializeField] private float velocidad = 5f;
+    [SerializeField] private float tiempoVida = 3f;
 
     private Rigidbody rb;
 
     private void Start()
     {
-        rb = GetComponent<Rigidbody>(); 
+        rb = GetComponent<Rigidbody>();
         rb.velocity = transform.forward * velocidad;
         Destroy(gameObject, tiempoVida);
     }
@@ -27,13 +27,12 @@ public class BalaLargaDistancia : MonoBehaviour
             {
                 
                 player.RecibirDaño(daño);
-             
-                player.ReducirCordura(10); 
+              
+                player.ReducirCordura(5);  
             }
 
-            
+           
             Destroy(gameObject);
         }
     }
-
 }
