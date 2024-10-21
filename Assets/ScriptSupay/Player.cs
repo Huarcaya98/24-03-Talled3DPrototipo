@@ -57,6 +57,11 @@ public class Player : MonoBehaviour
         }
     }
 
+    public float GetVida() 
+    {
+        return vida;
+    }
+
     public float GetCordura()
     {
         return cordura;

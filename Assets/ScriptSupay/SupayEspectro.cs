@@ -4,85 +4,111 @@ using UnityEngine;
 
 public class SupayEspectro : MonoBehaviour
 {
-    [SerializeField] private float tiempoAgarrar = 5f;
-    [SerializeField] private int  CantidadCordura = 30;
-    [SerializeField] private float rangoDeteccion = 5f;
-    [SerializeField] private float velocidadMovimiento = 2f;
 
-    private bool estaAgarrando = false;
-    private GameObject jugador;
+    [SerializeField] private float rangoDeteccion = 10f;    
+    [SerializeField] private float tiempoPersecucion = 5f;  
+    [SerializeField] private float velocidadPersecucion = 4f; 
+    [SerializeField] private float dañoPorGolpe = 10f;
+    [SerializeField] private float intervaloDeDaño = 2f;
 
-  
-    void Update()
+    private Transform jugador;
+    private Vector3 posicionInicial;
+    private bool persiguiendo = false;
+    private float tiempoRestantePersecucion;
+    private float tiempoUltimoGolpe;
+
+    private void Start()
     {
-        if(jugador != null && !estaAgarrando)
-        {
-            float distanciaAlJugador = Vector3.Distance(transform.position, jugador.transform.position);
+        posicionInicial = transform.position; 
+        tiempoRestantePersecucion = tiempoPersecucion;
+        tiempoUltimoGolpe = 0f;
+    }
 
-            if(distanciaAlJugador <= rangoDeteccion)
+    private void Update()
+    {
+        if (jugador != null)
+        {
+            if (Vector3.Distance(transform.position, jugador.position) <= rangoDeteccion)
             {
-                MoverHaciaJugador();
-              
+                PerseguirJugador();
+
+
+                if (!persiguiendo)
+                {
+                    persiguiendo = true;
+                    tiempoRestantePersecucion = tiempoPersecucion;
+                }
             }
+            else if (persiguiendo)
+            {
+                RegresarAPosicionInicial();
+            }
+        }
+        else 
+        {
+            RegresarAPosicionInicial();
         }
     }
 
-    private void MoverHaciaJugador()
+    private void PerseguirJugador()
     {
+
+        transform.position = Vector3.MoveTowards(transform.position, jugador.position, velocidadPersecucion * Time.deltaTime);
+
         
-        Vector3 direccion = (jugador.transform.position - transform.position).normalized;
-        transform.position += direccion * velocidadMovimiento * Time.deltaTime;
-
-        if (Vector3.Distance(transform.position, jugador.transform.position) < 1f && !estaAgarrando)
+        if (Vector3.Distance(transform.position, jugador.position) <= 1f && Time.time - tiempoUltimoGolpe >= intervaloDeDaño)
         {
-            StartCoroutine(AgarrarJugador());
-        }
-    }
+            
+            jugador.GetComponent<Player>().RecibirDaño(dañoPorGolpe);
+            tiempoUltimoGolpe = Time.time; 
 
-    private IEnumerator AgarrarJugador()
-    {
-        estaAgarrando = true;
-
-        Player jugadorScript = jugador.GetComponent<Player>();
-
-        if(jugadorScript  != null)
-        {
-            jugadorScript.ReducirCordura(CantidadCordura);
-            Debug.Log("SUPAY ESPECTRO ha agarrado al jugador y le ha reducido la cordura en " + CantidadCordura);
-
-            if (jugadorScript.GetCordura() <= 0)
+            
+            if (jugador.GetComponent<Player>().GetVida() <= 0)
             {
-                Debug.Log("JUGADOR SE VOLVIO LOCO");
+                Debug.Log("ESTÁ MUERTO");
+                Destroy(jugador.gameObject); 
             }
         }
-        yield return new WaitForSeconds(tiempoAgarrar);
 
-        estaAgarrando = false;
-        Debug.Log("SUPAY ESPECTRO ha terminado el agarre.");
+        tiempoRestantePersecucion -= Time.deltaTime;
+        if (tiempoRestantePersecucion <= 0) 
+        {
+            RegresarAPosicionInicial();
+        }
     }
 
+    private void RegresarAPosicionInicial()
+    {
+        if (persiguiendo) 
+        {
+            persiguiendo = false;
+            transform.position = Vector3.MoveTowards(transform.position, posicionInicial, velocidadPersecucion * Time.deltaTime);
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+       
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, rangoDeteccion);
+    }
 
     private void OnTriggerEnter(Collider other)
     {
+       
         if (other.CompareTag("PLAYER"))
         {
-            jugador = other.gameObject;
-            StartCoroutine(AgarrarJugador());
+            jugador = other.transform;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("PLAYER")) 
-        {
-            jugador = null; 
-        }
-    }
-
-    private void OnDrawGizmosSelected()
-    {
         
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, rangoDeteccion);
+        if (other.CompareTag("PLAYER"))
+        {
+            jugador = null;
+            RegresarAPosicionInicial();
+        }
     }
 }
