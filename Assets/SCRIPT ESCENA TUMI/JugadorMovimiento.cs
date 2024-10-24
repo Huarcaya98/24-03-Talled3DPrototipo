@@ -6,12 +6,13 @@ public class JugadorMovimiento : MonoBehaviour
 {
     public float moveSpeed = 5f; 
     private Rigidbody rb;
-    private int piecesCollected = 0;
+    private VictoryScreen victoryScreenManager;
 
     void Start()
     {
         
         rb = GetComponent<Rigidbody>();
+        victoryScreenManager = FindObjectOfType<VictoryScreen>();
     }
 
     void FixedUpdate()
@@ -29,13 +30,13 @@ public class JugadorMovimiento : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        
+
         if (other.CompareTag("TUMI"))
         {
-            piecesCollected++; 
-            Debug.Log($"Piezas recolectadas del Tumi: {piecesCollected}");
-            Destroy(other.gameObject);
+            victoryScreenManager.CollectPiece(); 
+            Destroy(other.gameObject); 
         }
+    
     }
 
 
