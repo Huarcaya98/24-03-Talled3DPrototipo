@@ -8,6 +8,7 @@ TagManager:
   - Piston
   - JUGADOR
   - PLAYER
+  - TUMI
   layers:
   - Default
   - TransparentFX
