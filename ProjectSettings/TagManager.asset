@@ -9,6 +9,12 @@ TagManager:
   - JUGADOR
   - PLAYER
   - TUMI
+  - Ammo
+  - Cruz
+  - Bala
+  - Bacija
+  - Palanca
+  - Antorcha
   layers:
   - Default
   - TransparentFX

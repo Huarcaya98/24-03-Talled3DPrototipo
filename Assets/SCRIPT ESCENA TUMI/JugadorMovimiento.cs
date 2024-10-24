@@ -9,6 +9,7 @@ public class JugadorMovimiento : MonoBehaviour
     private VictoryScreen victoryScreenManager;
 
     public PalancaJesus palanca;
+    public AntorchaJesus antorcha;
 
 
     void Start()
@@ -45,6 +46,11 @@ public class JugadorMovimiento : MonoBehaviour
         {
             
             palanca.Interactuar();
+        }
+
+        if (other.CompareTag("Antorcha")) 
+        {
+            antorcha.Interactuar();
         }
 
     }
