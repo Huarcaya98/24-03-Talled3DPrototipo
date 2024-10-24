@@ -6,6 +6,7 @@ public class JugadorMovimiento : MonoBehaviour
 {
     public float moveSpeed = 5f; 
     private Rigidbody rb;
+    private int piecesCollected = 0;
 
     void Start()
     {
@@ -24,6 +25,17 @@ public class JugadorMovimiento : MonoBehaviour
 
         
         rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        
+        if (other.CompareTag("TUMI"))
+        {
+            piecesCollected++; 
+            Debug.Log($"Piezas recolectadas del Tumi: {piecesCollected}");
+            Destroy(other.gameObject);
+        }
     }
 
 
