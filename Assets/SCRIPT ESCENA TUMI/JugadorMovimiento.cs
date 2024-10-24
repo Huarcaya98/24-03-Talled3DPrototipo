@@ -8,12 +8,16 @@ public class JugadorMovimiento : MonoBehaviour
     private Rigidbody rb;
     private VictoryScreen victoryScreenManager;
 
+    public PalancaJesus palanca;
+
+
     void Start()
     {
         
         rb = GetComponent<Rigidbody>();
         victoryScreenManager = FindObjectOfType<VictoryScreen>();
     }
+
 
     void FixedUpdate()
     {
@@ -36,9 +40,14 @@ public class JugadorMovimiento : MonoBehaviour
             victoryScreenManager.CollectPiece(); 
             Destroy(other.gameObject); 
         }
-    
+
+        if (other.CompareTag("Palanca"))
+        {
+            
+            palanca.Interactuar();
+        }
+
     }
 
-
-
+ 
 }
